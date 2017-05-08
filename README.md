@@ -6,7 +6,7 @@ The inconsistency lies in the validate() method of a domain object when databind
 
 Its easier to understand with an Example:
 
-
+```
 class Parent {
 	Child child;
     static constraints = { }
@@ -16,19 +16,19 @@ class Child {
 	String dummy;
 	static belongsTo = [ parent : Parent ];
     static constraints = {
-		parent( nullable: false )	// This is where validate() fails.
+		parent nullable: false
     }
 }
+```
 
-
+```
 So that if we use databinding like this (in this sample project, its in BootStrap.groovy):
-
 
 def map = [
 	"child": ["dummy": "populated"]
 ];
 Parent parent  =  new Parent( map );
-
+```
 
 And then we call parent.validate() it will return FALSE for Grails 3.2.9 but will return TRUE for Grails 3.1.12.
 In further investigation we can see that validate() method fails in Grails 3.2.9 because the constraint "parent( nullable: false )" wasn't met in the child object.
